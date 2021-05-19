@@ -1,21 +1,28 @@
+export enum WeatherCondition {
+  Rain = 'Rain',
+  Snow = 'Snow',
+  Clear = 'Clear',
+  Clouds = 'Clouds',
+}
 
-export interface LocationWeather {
+export interface Weather {
+  id: number;
+  main: WeatherCondition;
+  description: string;
+  icon: string;
+}
+
+export interface WeatherMain {
+  temp: number;
+  feels_like: number;
+  temp_min: number;
+  temp_max: number;
+  pressure: number;
+  humidity: number;
+}
+export interface LocationOpenWeather {
   id: string;
   name: string;
-
-  weather: {
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  }[];
-
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-  };
+  weather: Weather[];
+  main: WeatherMain;
 }

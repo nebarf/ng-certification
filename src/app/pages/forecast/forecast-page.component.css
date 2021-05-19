@@ -1,0 +1,19 @@
+.loading-spinner-container {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: stretch;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  align-items: center;
+  justify-content: center;
+}
+
+.locations-list-container {
+  position: relative;
+  min-height: 60px;
+}
+
+.reset-btn {
+  margin-left: 10px;
+}
