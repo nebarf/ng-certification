@@ -91,6 +91,6 @@ export class LocationsLocalStorageService extends LocationsMemoryStorageService 
    */
   clear(): void {
     this.storage.removeItem(LocationsLocalStorageService.key);
-    this.clear();
+    super.clear();
   }
 }
