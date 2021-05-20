@@ -30,19 +30,35 @@
       <app-loading-spinner [isVisible]="isLoadingLocations"></app-loading-spinner>
     </div>
     <div class="well flex" *ngFor="let location of (locations$ | async)">
-      <div>
-        <h3>{{ location.openWeather.name }} ({{ location.zipCode }})</h3>
-        <h4>Current conditions: Clouds</h4>
-        <h4>Temperatures today:</h4>
-        <p>Current {{ location.openWeather.main.temp }} - Max {{ location.openWeather.main.temp_max }} - Min {{ location.openWeather.main.temp_min }}</p>
-        <p>
-          <a [routerLink]="location.zipCode">Show 5-day forecast for {{ location.openWeather.name }}</a>
-        </p>
-      </div>
-      <div *ngIf="location.openWeather.weather[0] as firstWeather">
-        <span class="close" (click)="removeLocationClicked(location.zipCode)">×</span>
-        <img [src]="firstWeather.main | weatherConditionIcon" />
-      </div>
+      <ng-container *ngIf="!location.errored; else erroredLocation">
+        <div>
+          <h3>{{ location.openWeather.name }} ({{ location.zipCode }})</h3>
+          <h4>Current conditions: Clouds</h4>
+          <h4>Temperatures today:</h4>
+          <p>Current {{ location.openWeather.main.temp }} - Max {{ location.openWeather.main.temp_max }} - Min {{ location.openWeather.main.temp_min }}</p>
+          <p>
+            <a [routerLink]="location.zipCode">Show 5-day forecast for {{ location.openWeather.name }}</a>
+          </p>
+        </div>
+        <div>
+          <span class="close" (click)="removeLocationClicked(location.zipCode)">×</span>
+          <img 
+            *ngIf="location.openWeather.weather[0] as firstWeather" 
+            [src]="firstWeather.main | weatherConditionIcon" 
+          />
+        </div>
+      </ng-container>
+
+      <ng-template #erroredLocation>
+        <div>
+          <h3>Unknown location ({{ location.zipCode }})</h3>
+          <em>Unable to load the weather location.</em>
+        </div>
+        <div>
+          <span class="close" (click)="removeLocationClicked(location.zipCode)">×</span>
+          <img src="assets/question-mark.png" class="question-mark-img" />
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>

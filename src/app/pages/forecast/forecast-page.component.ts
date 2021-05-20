@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, forkJoin, iif, Observable, of } from 'rxjs';
-import { delay, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { catchError, delay, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { LocationOpenWeather } from 'src/app/models/location-weather.model';
 import { OpenWeatherHttpService } from 'src/app/services/http/open-weather-http.service';
 
@@ -10,6 +10,7 @@ import { LocationStorage } from 'src/app/services/locations-storage/location-sto
 export interface LocationOpenWeatherVM {
   openWeather: LocationOpenWeather;
   zipCode: string;
+  errored?: boolean;
 }
 
 @Component({
@@ -76,6 +77,11 @@ export class ForecastPageComponent implements OnInit {
             .pipe(
               map((weather: LocationOpenWeather) => ({ openWeather: weather, zipCode })),
               tap((locationOpenWeatherVM: LocationOpenWeatherVM) => this._locationCache.set(zipCode, locationOpenWeatherVM)),
+              catchError(() => of({
+                errored: true,
+                zipCode,
+                weather: null,
+              })),
             );
         });
         return forkJoin(weatherRequests);
